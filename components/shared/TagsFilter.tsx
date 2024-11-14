@@ -1,3 +1,4 @@
+// components/shared/TagsFilter.tsx
 import React from 'react';
 
 interface TagsFilterProps {

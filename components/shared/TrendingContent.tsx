@@ -1,3 +1,4 @@
+// components/shared/TrendingContent.tsx
 import fetcher from '@/lib/fetcher';
 import { ContentType } from '@/lib/types';
 import Image from 'next/image';
