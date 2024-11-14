@@ -2,6 +2,7 @@
 'use client';
 import ContentGrid from '@/components/shared/ContentGrid';
 import TagsFilter from '@/components/shared/TagsFilter';
+import TrendingContent from '@/components/shared/TrendingContent';
 import fetcher from '@/lib/fetcher';
 import { useState } from 'react';
 import useSWR from 'swr';
@@ -28,6 +29,7 @@ export default function Home() {
 			) : (
 				<ContentGrid contents={data} />
 			)}
+			<TrendingContent />
 		</div>
 	);
 }

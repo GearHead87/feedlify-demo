@@ -14,9 +14,9 @@ interface ContentGridProps {
 
 const ContentGrid: React.FC<ContentGridProps> = ({ contents }) => {
 	return (
-		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+		<div className="grid grid-cols-2 flex-1">
 			{contents.map((item, index) => (
-				<div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+				<div key={index} className="bg-white rounded-lg shadow-md overflow-hidden h-96">
 					<Image
 						src={`${item.thumbnail}`}
 						alt={item.title}
