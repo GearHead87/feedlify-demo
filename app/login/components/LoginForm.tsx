@@ -24,6 +24,8 @@ import {
 } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const loginSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' }),
@@ -34,6 +36,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
 	const [serverError, setServerError] = useState<string | null>(null);
+	const { login } = useAuth();
+	const router = useRouter();
 
 	const form = useForm<LoginFormValues>({
 		resolver: zodResolver(loginSchema),
@@ -47,9 +51,14 @@ export default function LoginForm() {
 		try {
 			// Here you would typically send a request to your server
 			console.log('Login data:', data);
+			const { email, password } = data;
+			
+			await login(email, password);
+			router.push('/');
 			// Simulating an API call
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// await new Promise((resolve) => setTimeout(resolve, 1000));
 			// If login is successful, you might redirect the user or update the app state
+
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error) {
 			setServerError('Failed to login. Please try again.');

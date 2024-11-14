@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			throw new Error('Invalid credentials');
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password: _, ...userWithoutPassword } = foundUser;
 		const token = generateFakeToken(userWithoutPassword);
 
@@ -144,9 +145,9 @@ export function withAuth<P extends object>(WrappedComponent: React.ComponentType
 	return function WithAuthComponent(props: P) {
 		const { isAuthenticated, isLoading } = useAuth();
 
-		// Handle the loading state
+		// If loading, return a loading component
 		if (isLoading) {
-			return <div>Loading...</div>; // You can replace this with a proper loading component
+			return <div>Loading...</div>;
 		}
 
 		// If not authenticated, redirect to login

@@ -13,20 +13,20 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Navbar() {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const router = useRouter();
+	const { user, isAuthenticated, isLoading, logout } = useAuth();
+	console.log(user);
 
 	const handleLogin = () => {
-		// Simulating login process
-		setIsLoggedIn(true);
+		router.push('/login');
 	};
 
 	const handleLogout = () => {
-		// Simulating logout process
-		setIsLoggedIn(false);
+		logout();
 		router.push('/');
 	};
 
@@ -64,7 +64,9 @@ export default function Navbar() {
 						</div>
 					</div>
 					<div className="hidden md:block">
-						{isLoggedIn ? (
+						{isLoading ? (
+							<div>Loading...</div>
+						) : isAuthenticated ? (
 							<DropdownMenu>
 								<DropdownMenuTrigger asChild>
 									<Button
@@ -132,7 +134,9 @@ export default function Navbar() {
 						>
 							Contact Us
 						</Link>
-						{isLoggedIn ? (
+						{isLoading ? (
+							<div>Loading...</div>
+						) : isAuthenticated ? (
 							<>
 								<Button
 									variant="ghost"
