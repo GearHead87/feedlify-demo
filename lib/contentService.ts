@@ -33,7 +33,7 @@ const content = [
 	// Add more content as needed
 ];
 
-export async function getFilteredContent(selectedTags: string[]) {
+export async function getFilteredContent(selectedTags: string[] | '') {
 	if (!selectedTags) {
 		return content;
 	}
