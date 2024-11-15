@@ -1,70 +1,63 @@
-import React from 'react'
-import useSWR from 'swr'
-import Image from 'next/image'
-import fetcher from '@/lib/fetcher'
-import { ContentType } from '@/lib/types'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
+'use client';
+
+import React from 'react';
+import useSWR from 'swr';
+import Image from 'next/image';
+import fetcher from '@/lib/fetcher';
+import { ContentType } from '@/lib/types';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const TrendingContent = () => {
-  const { data: contents, isLoading } = useSWR<ContentType[]>(`/api/content?tags=`, fetcher)
+	const { data: contents, isLoading } = useSWR<ContentType[]>(`/api/content?tags=`, fetcher);
 
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(6)].map((_, i) => (
-          <Card key={i} className="overflow-hidden">
-            <Skeleton className="h-48 w-full" />
-            <CardHeader>
-              <Skeleton className="h-6 w-2/3" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-5/6" />
-            </CardContent>
-            <CardFooter>
-              <div className="flex gap-2">
-                <Skeleton className="h-6 w-16" />
-                <Skeleton className="h-6 w-16" />
-              </div>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
-    )
-  }
+	if (isLoading) {
+		return (
+			<div className="space-y-4">
+				{[...Array(3)].map((_, i) => (
+					<Card key={i} className="overflow-hidden">
+						<div className="flex items-center space-x-4 p-4">
+							<Skeleton className="h-16 w-16 rounded" />
+							<div className="space-y-2 flex-1">
+								<Skeleton className="h-4 w-full" />
+								<Skeleton className="h-4 w-5/6" />
+							</div>
+						</div>
+					</Card>
+				))}
+			</div>
+		);
+	}
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {contents?.map((item, index) => (
-        <Card key={index} className="overflow-hidden">
-          <Image
-            src={item.thumbnail}
-            alt={item.title}
-            className="w-full h-48 object-cover"
-            width={400}
-            height={200}
-          />
-          <CardHeader>
-            <CardTitle>{item.title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">{item.description}</p>
-          </CardContent>
-          <CardFooter>
-            <div className="flex flex-wrap gap-2">
-              {item.tags.map((tag, tagIndex) => (
-                <Badge key={tagIndex} variant="secondary">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
-  )
-}
+	return (
+		<div className="space-y-4">
+			{contents?.slice(0, 5).map((item, index) => (
+				<Card key={index} className="overflow-hidden">
+					<div className="flex items-center space-x-4 p-4">
+						<Image
+							src={item.thumbnail}
+							alt={item.title}
+							className="w-16 h-16 object-cover rounded"
+							width={64}
+							height={64}
+						/>
+						<div className="flex-1">
+							<h3 className="font-semibold text-base mb-1">{item.title}</h3>
+							<p className="text-sm mb-1">{item.description}</p>
+							<div className="flex flex-wrap gap-1">
+								{item.tags.slice(0, 2).map((tag, tagIndex) => (
+									<Badge key={tagIndex} variant="secondary" className="text-xs">
+										{tag}
+									</Badge>
+								))}
+							</div>
+						</div>
+					</div>
+				</Card>
+			))}
+		</div>
+	);
+};
 
-export default TrendingContent
+export default TrendingContent;

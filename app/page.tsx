@@ -1,48 +1,47 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import useSWR from 'swr'
-import ContentGrid from '@/components/shared/ContentGrid'
-import TagsFilter from '@/components/shared/TagsFilter'
-import TrendingContent from '@/components/shared/TrendingContent'
-import fetcher from '@/lib/fetcher'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useState } from 'react';
+import useSWR from 'swr';
+import ContentGrid from '@/components/shared/ContentGrid';
+import TagsFilter from '@/components/shared/TagsFilter';
+import TrendingContent from '@/components/shared/TrendingContent';
+import fetcher from '@/lib/fetcher';
 
 export default function Home() {
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
-  const { data, error } = useSWR(`/api/content?tags=${selectedTags.join(',')}`, fetcher)
+	const [selectedTags, setSelectedTags] = useState<string[]>([]);
+	const { data, error, isLoading } = useSWR(
+		`/api/content?tags=${selectedTags.join(',')}`,
+		fetcher
+	);
 
-  const handleTagSelect = (tag: string) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag))
-    } else {
-      setSelectedTags([...selectedTags, tag])
-    }
-  }
+	const handleTagSelect = (tag: string) => {
+		if (selectedTags.includes(tag)) {
+			setSelectedTags(selectedTags.filter((t) => t !== tag));
+		} else {
+			setSelectedTags([...selectedTags, tag]);
+		}
+	};
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <Tabs defaultValue="all" className="space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-          <TabsList>
-            <TabsTrigger value="all">All Content</TabsTrigger>
-            <TabsTrigger value="trending">Trending</TabsTrigger>
-          </TabsList>
-          <TagsFilter selectedTags={selectedTags} onTagSelect={handleTagSelect} />
-        </div>
-        <TabsContent value="all">
-          {error ? (
-            <div className="text-center text-red-500">Error loading content</div>
-          ) : !data ? (
-            <div className="text-center">Loading...</div>
-          ) : (
-            <ContentGrid contents={data} />
-          )}
-        </TabsContent>
-        <TabsContent value="trending">
-          <TrendingContent />
-        </TabsContent>
-      </Tabs>
-    </div>
-  )
+	return (
+		<div className="container mx-auto px-4 py-8">
+			<div className="flex flex-col lg:flex-row gap-8">
+				<aside className="w-full lg:w-1/5">
+					<TagsFilter selectedTags={selectedTags} onTagSelect={handleTagSelect} />
+				</aside>
+				<main className="w-full lg:w-1/2">
+					{error ? (
+						<div className="text-center text-red-500">Error loading content</div>
+					) : isLoading ? (
+						<div className="text-center">Loading...</div>
+					) : (
+						<ContentGrid contents={data} />
+					)}
+				</main>
+				<aside className="w-full lg:w-1/4">
+					<h2 className="text-2xl font-bold mb-4">Trending Content</h2>
+					<TrendingContent />
+				</aside>
+			</div>
+		</div>
+	);
 }
