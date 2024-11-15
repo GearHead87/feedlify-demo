@@ -5,7 +5,7 @@ import React from 'react';
 import { Card, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Check, X, HelpCircle, ChevronDown } from 'lucide-react';
+import { Check, X, HelpCircle, ChevronDown, CircleCheckBig } from 'lucide-react';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -22,9 +22,10 @@ interface Content {
 
 interface ContentGridProps {
 	contents: Content[];
+	varient: 'collections' | 'feedly';
 }
 
-const ContentGrid: React.FC<ContentGridProps> = ({ contents }) => {
+const ContentGrid: React.FC<ContentGridProps> = ({ contents, varient }) => {
 	return (
 		<div className="grid grid-cols-1 gap-6">
 			{contents.map((item, index) => (
@@ -52,28 +53,48 @@ const ContentGrid: React.FC<ContentGridProps> = ({ contents }) => {
 								</div>
 							</div>
 							<CardFooter className="px-0 pt-4 flex justify-end gap-2">
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
+								{varient === 'feedly' && (
+									<>
+										<Button variant="outline">
+											<CircleCheckBig className="mr-2 h-4 w-4" />
+											Accepted
+										</Button>
 										<Button variant="outline">
 											<Check className="mr-2 h-4 w-4" />
-											Accept
-											<ChevronDown className="ml-2 h-4 w-4" />
+											Relevant
 										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent>
-										<DropdownMenuItem>Great</DropdownMenuItem>
-										<DropdownMenuItem>Good</DropdownMenuItem>
-										<DropdownMenuItem>Average</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
-								<Button variant="outline">
-									<X className="mr-2 h-4 w-4" />
-									Decline
-								</Button>
-								<Button variant="outline">
-									<HelpCircle className="mr-2 h-4 w-4" />
-									Question
-								</Button>
+										<Button variant="outline">
+											<X className="mr-2 h-4 w-4" />
+											irrelevant
+										</Button>
+									</>
+								)}
+								{varient === 'collections' && (
+									<>
+										<DropdownMenu>
+											<DropdownMenuTrigger asChild>
+												<Button variant="outline">
+													<Check className="mr-2 h-4 w-4" />
+													Accept
+													<ChevronDown className="ml-2 h-4 w-4" />
+												</Button>
+											</DropdownMenuTrigger>
+											<DropdownMenuContent>
+												<DropdownMenuItem>Great</DropdownMenuItem>
+												<DropdownMenuItem>Good</DropdownMenuItem>
+												<DropdownMenuItem>Average</DropdownMenuItem>
+											</DropdownMenuContent>
+										</DropdownMenu>
+										<Button variant="outline">
+											<X className="mr-2 h-4 w-4" />
+											Decline
+										</Button>
+										<Button variant="outline">
+											<HelpCircle className="mr-2 h-4 w-4" />
+											Question
+										</Button>
+									</>
+								)}
 							</CardFooter>
 						</div>
 					</div>
